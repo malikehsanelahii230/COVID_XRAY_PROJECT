@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>COVID X-Ray AI Scanner</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            X-Ray<span>AI</span>
+        </div>
+
+        <nav>
+            <a href="#" id="navHome">Home</a>
+            <a href="#scanner" id="navScanner">Scanner</a>
+            <a href="#about" id="navAbout">About</a>
+
+            <div class="language-selector">
+                <button class="language-btn active" data-lang="en">English</button>
+                <button class="language-btn" data-lang="fr">Français</button>
+                <button class="language-btn" data-lang="ur">Roman Urdu</button>
+            </div>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-text">
+
+                <p class="badge" id="heroBadge">
+                    AI-POWERED X-RAY ANALYSIS
+                </p>
+
+                <h1>
+                    <span id="heroTitle1">Intelligent</span>
+                    <span id="heroTitle2">X-Ray</span>
+                    <span id="heroTitle3">Classification</span>
+                </h1>
+
+                <p class="description" id="heroDescription">
+                    Upload a chest X-ray and let our machine-learning
+                    model classify it into COVID, Normal, or Pneumonia.
+                </p>
+
+                <a href="#scanner" class="start-btn" id="startBtn">
+                    Start Analysis →
+                </a>
+
+            </div>
+
+            <div class="hero-card">
+
+                <div class="scan-circle">
+                    <div class="scan-line"></div>
+                    <span>AI</span>
+                </div>
+
+                <p id="heroCardTitle">AI Analysis System</p>
+                <small id="heroCardStatus">Ready for X-Ray</small>
+
+            </div>
+
+        </section>
+
+
+        <section id="scanner" class="scanner-section">
+
+            <div class="section-heading">
+
+                <p class="badge" id="scannerBadge">
+                    X-RAY SCANNER
+                </p>
+
+                <h2>
+                    <span id="scannerTitle1">Upload Your</span>
+                    <span id="scannerTitle2">X-Ray</span>
+                </h2>
+
+                <p id="scannerDescription">
+                    Select a chest X-ray image to begin analysis.
+                </p>
+
+            </div>
+
+
+            <div class="upload-box" id="uploadBox">
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept="image/png,image/jpeg,image/jpg"
+                    hidden
+                >
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <h3 id="uploadTitle">
+                    Upload X-Ray Image
+                </h3>
+
+                <p>
+                    <span id="uploadText">
+                        Drag & drop your image here or
+                    </span>
+
+                    <button id="browseBtn">
+                        browse
+                    </button>
+                </p>
+
+                <small id="fileTypes">
+                    PNG, JPG or JPEG
+                </small>
+
+            </div>
+
+
+            <div class="preview-container" id="previewContainer">
+
+                <img id="previewImage" alt="X-Ray Preview">
+
+                <div class="file-info">
+
+                    <h3 id="fileName"></h3>
+
+                    <button id="analyzeBtn">
+                        Analyze X-Ray →
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="loading" id="loading">
+
+                <div class="scan-animation"></div>
+
+                <h3 id="loadingTitle">
+                    AI Scanning...
+                </h3>
+
+                <p id="loadingText">
+                    Our AI model is processing the image.
+                </p>
+
+            </div>
+
+
+            <div class="result-card" id="resultCard">
+
+                <p class="result-label" id="resultLabel">
+                    AI MODEL PREDICTION
+                </p>
+
+                <h2 id="prediction"></h2>
+
+                <div class="confidence-section">
+
+                    <div class="confidence-title">
+                        <span id="covidLabel">COVID</span>
+                        <span id="covidConfidence">0%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div id="covidBar"></div>
+                    </div>
+
+
+                    <div class="confidence-title">
+                        <span id="normalLabel">NORMAL</span>
+                        <span id="normalConfidence">0%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div id="normalBar"></div>
+                    </div>
+
+
+                    <div class="confidence-title">
+                        <span id="pneumoniaLabel">PNEUMONIA</span>
+                        <span id="pneumoniaConfidence">0%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div id="pneumoniaBar"></div>
+                    </div>
+
+                </div>
+
+
+                <p class="disclaimer" id="disclaimer">
+                    This result is an AI model prediction for
+                    research/educational purposes and is not a medical diagnosis.
+                </p>
+
+                <button id="resetBtn">
+                    Analyze Another Image
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section id="about" class="about">
+
+            <p class="badge" id="aboutBadge">
+                ABOUT PROJECT
+            </p>
+
+            <h2>
+                <span id="aboutTitle1">Machine Learning</span>
+                <span id="aboutTitle2">Behind The Scanner</span>
+            </h2>
+
+            <p id="aboutDescription">
+                This project uses chest X-ray images and a machine-learning
+                classification model to distinguish between COVID,
+                Normal, and Pneumonia image classes.
+            </p>
+
+
+            <div class="stats">
+
+                <div>
+                    <strong>5,228+</strong>
+                    <span id="statImages">X-Ray Images</span>
+                </div>
+
+                <div>
+                    <strong>94.65%</strong>
+                    <span id="statAccuracy">Test Accuracy</span>
+                </div>
+
+                <div>
+                    <strong>3</strong>
+                    <span id="statClasses">Classes</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p id="footerTitle">
+            COVID X-Ray AI Classification Project
+        </p>
+
+        <p id="footerSubtitle">
+            Machine Learning Research Project
+        </p>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+dataset/
+xray_dataset.csv
+__pycache__/
+*.pyc

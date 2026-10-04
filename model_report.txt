@@ -1,0 +1,15 @@
+COVID X-RAY CLASSIFICATION MODEL REPORT
+=============================================
+
+Accuracy: 0.9465
+
+Classification Report:
+              precision    recall  f1-score   support
+
+       COVID       0.97      0.98      0.97       325
+      NORMAL       0.95      0.92      0.94       361
+   PNEUMONIA       0.92      0.94      0.93       360
+
+    accuracy                           0.95      1046
+   macro avg       0.95      0.95      0.95      1046
+weighted avg       0.95      0.95      0.95      1046
