@@ -118,12 +118,12 @@ analyzeBtn.addEventListener("click", async function () {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/predict",
-            {
-                method: "POST",
-                body: formData
-            }
-        );
+    "https://covid-xray-project.fastapicloud.dev/predict",
+    {
+        method: "POST",
+        body: formData
+    }
+    );
 
 
         if (!response.ok) {
@@ -164,19 +164,39 @@ analyzeBtn.addEventListener("click", async function () {
 /* =========================
    SHOW RESULT
 ========================= */
-
 function showResult(data) {
 
     resultCard.style.display = "block";
 
+    // Handle non-X-ray images
+    if (data.prediction === "NOT_X_RAY") {
 
+        prediction.textContent = "NOT X-RAY";
+
+        covidConfidence.textContent = "—";
+        normalConfidence.textContent = "—";
+        pneumoniaConfidence.textContent = "—";
+
+        covidBar.style.width = "0%";
+        normalBar.style.width = "0%";
+        pneumoniaBar.style.width = "0%";
+
+        alert(data.message || "Please upload a chest X-ray image.");
+
+        resultCard.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        return;
+    }
+
+    // Handle X-ray classification
     prediction.textContent = data.prediction;
 
-
-    const covid = data.confidence.COVID || 0;
-    const normal = data.confidence.NORMAL || 0;
-    const pneumonia = data.confidence.PNEUMONIA || 0;
-
+    const covid = data.confidence?.COVID || 0;
+    const normal = data.confidence?.NORMAL || 0;
+    const pneumonia = data.confidence?.PNEUMONIA || 0;
 
     covidConfidence.textContent =
         covid.toFixed(2) + "%";
@@ -187,24 +207,20 @@ function showResult(data) {
     pneumoniaConfidence.textContent =
         pneumonia.toFixed(2) + "%";
 
-
     setTimeout(function () {
 
         covidBar.style.width = covid + "%";
-
         normalBar.style.width = normal + "%";
-
         pneumoniaBar.style.width = pneumonia + "%";
 
     }, 100);
-
 
     resultCard.scrollIntoView({
         behavior: "smooth",
         block: "center"
     });
-
 }
+
 
 
 /* =========================
@@ -232,7 +248,6 @@ resetBtn.addEventListener("click", function () {
     resultCard.style.display = "none";
 
     window.location.hash = "scanner";
-const languageButtons = document.querySelectorAll(".language-btn");
 });
 // ===============================
 // LANGUAGE TRANSLATION SYSTEM
