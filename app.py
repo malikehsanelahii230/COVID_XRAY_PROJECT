@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import joblib
 import numpy as np
@@ -17,8 +17,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load trained model
+# Load models
 model = joblib.load("covid_xray_model.pkl")
+validator = joblib.load("xray_validator_model.pkl")
 
 
 @app.get("/")
@@ -34,8 +35,13 @@ async def predict(file: UploadFile = File(...)):
     # Read uploaded image
     image_bytes = await file.read()
 
-    # Open image
-    image = Image.open(io.BytesIO(image_bytes))
+    try:
+        image = Image.open(io.BytesIO(image_bytes))
+    except Exception:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid image file."
+        )
 
     # Convert to grayscale
     image = image.convert("L")
@@ -49,12 +55,43 @@ async def predict(file: UploadFile = File(...)):
     # Normalize
     pixels = pixels / 255.0
 
-    pixels = pixels.reshape(1, -1)
+    # -----------------------------
+    # STEP 1: X-RAY VALIDATION
+    # -----------------------------
 
-    pixel_columns = [f"pixel_{i}" for i in range(4096)]
+    validator_input = pixels.reshape(1, -1)
+
+    validator_prediction = validator.predict(validator_input)[0]
+    validator_probabilities = validator.predict_proba(validator_input)[0]
+
+    validator_confidence = {}
+
+    for class_name, probability in zip(
+        validator.classes_,
+        validator_probabilities
+    ):
+        validator_confidence[class_name] = round(
+            float(probability * 100), 2
+        )
+
+    # Reject non-X-ray images
+    if validator_prediction == "NOT_X_RAY":
+        return {
+            "prediction": "NOT_X_RAY",
+            "message": "Please upload a chest X-ray image.",
+            "validator_confidence": validator_confidence
+        }
+
+    # -----------------------------
+    # STEP 2: COVID CLASSIFICATION
+    # -----------------------------
+
+    pixel_columns = [
+        f"pixel_{i}" for i in range(4096)
+    ]
 
     pixels_df = pd.DataFrame(
-        pixels,
+        validator_input,
         columns=pixel_columns
     )
 
@@ -63,11 +100,17 @@ async def predict(file: UploadFile = File(...)):
 
     confidence = {}
 
-    for class_name, probability in zip(model.classes_, probabilities):
-        confidence[class_name] = round(float(probability * 100), 2)
+    for class_name, probability in zip(
+        model.classes_,
+        probabilities
+    ):
+        confidence[class_name] = round(
+            float(probability * 100), 2
+        )
 
     return {
         "prediction": prediction,
-        "confidence": confidence
+        "confidence": confidence,
+        "validator": "X_RAY",
+        "validator_confidence": validator_confidence
     }
-    
